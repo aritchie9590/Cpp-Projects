@@ -1,6 +1,4 @@
-// Draw an Icosahedron
-// ECE4893/8893 Project 4
-// YOUR NAME HERE
+// Render an Icosahedron
 
 #include <iostream>
 #include <math.h>
