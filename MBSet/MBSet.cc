@@ -1,5 +1,4 @@
-// Calculate and display the Mandelbrot set
-// ECE4893/8893 final project, Fall 2011
+// Mandelbrot Set GUI
 
 #include <iostream>
 #include <string.h>
