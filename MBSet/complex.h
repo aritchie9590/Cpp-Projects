@@ -1,5 +1,5 @@
 //
-// ECE8893 - Complex Number Class decaration
+// Complex Number Class
 //
 
 
