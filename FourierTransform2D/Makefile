@@ -1,4 +1,4 @@
-# Makefile for ECE8893, 2D FFT assignment
+# Makefile
 
 CXX      = /usr/lib64/openmpi/bin/mpic++
 CXXFLAGS = -Wall -g
