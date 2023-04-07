@@ -1,4 +1,4 @@
-// Distributed two-dimensional Discrete FFT transform
+// Distributed 2d DFT
 
 #include <iostream>
 #include <fstream>
