@@ -1,5 +1,5 @@
 //
-// Mandelbrot Set GUI
+// complex number class
 
 #include <iostream>
 #include <string>
