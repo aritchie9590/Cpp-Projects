@@ -1,8 +1,5 @@
 //
-// ECE3090 Program 3 - Complex Number Class implementation
-// YOUR NAME HERE
-// PLATFORM (Windows or Linux)
-//
+// Mandelbrot Set GUI
 
 #include <iostream>
 #include <string>
