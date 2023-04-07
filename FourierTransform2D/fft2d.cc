@@ -1,7 +1,4 @@
 // Distributed two-dimensional Discrete FFT transform
-// YOUR NAME HERE
-// ECE8893 Project 1
-
 
 #include <iostream>
 #include <fstream>
@@ -17,16 +14,12 @@
 #include "InputImage.h"
 
 using namespace std;
-// make W a const global since it will be used a lot
 
-// done //
 void Transform1D(Complex* h, int w, Complex* H)
 {
-  // Implement a simple 1-d DFT using the double summation equation
-  // given in the assignment handout.  h is the time-domain input
+  // 1d DFT. h is the time-domain input
   // data, w is the width (N), and H is the output array.
-  
-  // more readable notation
+
   int N = w;
 	
   // double for loop DFT algorithm  
@@ -43,11 +36,9 @@ void Transform1D(Complex* h, int w, Complex* H)
 
 void I_Transform1D(Complex* H, int w, Complex* h)
 {
-  // Implement a simple 1-d inverse DFT using the double summation equation
-  // given in the assignment handout.  h is the time-domain input
+  // 1d inverse DFT.  h is the time-domain input
   // data, w is the width (N), and H is the output array.
-  
-  // more readable notation
+
   int N = w;
 	
   // double for loop DFT algorithm  
@@ -63,7 +54,7 @@ void I_Transform1D(Complex* H, int w, Complex* h)
 }
 
 void Transform2D(const char* inputFN) 
-{ // Do the 2D transform here.
+{ // 2D DFT
   // 1) Use the InputImage object to read in the Tower.txt file and
   //    find the width/height of the input image.
   // 2) Use MPI to find how many CPUs in total, and which one
@@ -93,33 +84,33 @@ void Transform2D(const char* inputFN)
 
 
   
-  // Step (1)
-  InputImage image(inputFN);  // Create the helper object for reading the image
+  // read image, get weidth and height
+  InputImage image(inputFN);  
   int width = image.GetWidth();
   int height = image.GetHeight();  
   
-  // Step (2)
+  // get number of cpus
   int  numtasks, rank, rc; 
   MPI_Comm_size(MPI_COMM_WORLD,&numtasks);
   MPI_Comm_rank(MPI_COMM_WORLD,&rank);
   MPI_Status status;
  
-  // Step (3)
+  // to hold intermediate transforms
   Complex* rowTransform = new  Complex [width*height];
   Complex* fullTransform = new  Complex [width*height];
   Complex* fullTransform_T = new  Complex [width*height];
   Complex* I_colTransform_T = new  Complex [width*height];
   Complex* I_colTransform = new  Complex [width*height]; 
   Complex* I_fullTransform = new  Complex [width*height];
-  // Step (4)
+  
   Complex* inputPtr = image.GetImageData();
 
-  // Step (5)
+  // transform time
   if(rank==0)
   {
     for(int i=0; i<height/numtasks; i++)
     {
-      // do the transforms
+      // row transform
       Complex H[width];
       Transform1D(inputPtr+(width*i), width, H);
       for(int k=0; k<width; k++)
@@ -131,18 +122,15 @@ void Transform2D(const char* inputFN)
     }
     
     
-    // check if this is the final rank and if it is do any remaining rows
-    // i dont think this is necessary on the rank zero since h/t = h if t=1    
+    // check if this is the final rank and if it is do any remaining rows   
     if (numtasks != 1){
-	    // receive from all the various sources and compile the results
-	    
+	    // receive from all the various sources and compile the results 
 	    for (int i=0; i<numtasks-1; i++){
 		MPI_Probe(MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
 		int len; 
 		MPI_Get_count(&status, complex, &len);
 		Complex buf[len];
 		int src = status.MPI_SOURCE;
-		//std::fill_n(buf, 2*(height*width/numtasks), Complex(0,0));
 	 
 		rc = MPI_Recv(buf, len, complex, src,
 			0, MPI_COMM_WORLD, &status);
@@ -262,23 +250,16 @@ void Transform2D(const char* inputFN)
     }
     
     
-    // check if this is the final rank and if it is do any remaining rows
-    // i dont think this is necessary on the rank zero since h/t = h if t=1    
+    // check if this is the final rank and if it is do any remaining rows  
     if (numtasks != 1){
     // receive from all the various sources and compile the results
     
     for (int i=0; i<numtasks-1; i++){
-        // deleted the 2*
-        //
-        //
-        //
-        //
         MPI_Probe(MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
         int len; 
         MPI_Get_count(&status, complex, &len);
         Complex buf[len];
         int src = status.MPI_SOURCE;
-        //std::fill_n(buf, 2*(height*width/numtasks), Complex(0,0));
  
         rc = MPI_Recv(buf, len, complex, src,
 	       	0, MPI_COMM_WORLD, &status);
@@ -395,23 +376,6 @@ void Transform2D(const char* inputFN)
 
 
 // DO THE INVERSE
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 // Do the inverse on the columns.
   if(rank==0)
   {
@@ -438,8 +402,7 @@ void Transform2D(const char* inputFN)
     }
     
     
-    // check if this is the final rank and if it is do any remaining rows
-    // i dont think this is necessary on the rank zero since h/t = h if t=1    
+    // check if this is the final rank and if it is do any remaining rows  
     if (numtasks != 1){
     // receive from all the various sources and compile the results
     
@@ -563,16 +526,6 @@ void Transform2D(const char* inputFN)
     width = height;
   }     
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 // Do the inverse on the rows.
   if(rank==0)
   {
@@ -595,8 +548,7 @@ void Transform2D(const char* inputFN)
     }
     
     
-    // check if this is the final rank and if it is do any remaining rows
-    // i dont think this is necessary on the rank zero since h/t = h if t=1    
+    // check if this is the final rank and if it is do any remaining rows   
     if (numtasks != 1){
     // receive from all the various sources and compile the results
     
